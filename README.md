@@ -1,9 +1,10 @@
-# copyfiles
-Copies files to directories specified in a text file
+# copyfiles.py
+
+This python script copies files to directories specified in a text file.
 
 # Usage
 
-Checkout the help message to get aquainted with the usage of copyfiles:
+Call the script with flag ```-h``` to display a help message:
 
 ```
 $ python copyfiles.py -h
@@ -30,5 +31,36 @@ optional arguments:
 author: Johannes Elias (joheli@gmx.net)
 
 ```
+# Arguments
 
+## positional (mandatory) arguments
 
+### file
+
+Specify here the file that contains instructions for the copying or moving of files. Please refer to [files.txt](https://github.com/joheli/copyfiles/blob/master/files.txt "copyfiles file") for an example.
+
+## optional arguments
+
+### -h
+
+This flag makes the script display a help message (see [Usage](#Usage)).
+
+### -v
+
+Using this flag increases verbosity of the script.
+
+### -m
+
+The default action is to copy files; if you wish to move them, use the ```-m``` flag. An error is generated if the files at the destination already exist.
+
+### -c
+
+As default, hash (#) is used to indicate lines that are ignored in 'file'. Use the ```-c``` flag to change it.
+
+### -r
+
+Use this flag to specify a file to which the "reverse" of file is to be written. This file can then be used to revert (undo) a previously executed copy/move operation.
+
+### -d
+
+Specify a delimiter differing from whitespace ('\s+') with this flag.
