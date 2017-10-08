@@ -7,24 +7,24 @@ import sys
 from shutil import copy2
 from shutil import move
 
-
+# function to check if file exists
 def file_exists(parser, arg):
     if not os.path.isfile(arg):
         parser.error("The file %s does not exist!" % arg)
     else:
         return arg
 
-
+# function returning the filename only given the path
 def pathToFile(path):
     h, t = os.path.split(path)
     return t
 
-
+# function returning the directory in which a given file resides
 def filenameToDir(filename):
     p = os.path.abspath(filename)
     return os.path.dirname(p)
 
-
+# create an argument parser and add positional (=mandatory) and optional arguments
 parser = argparse.ArgumentParser(description="copies files to target directories specified in a text file",
                                  epilog="author: Johannes Elias (joheli@gmx.net)")
 parser.add_argument("file", help="text file listing files to be copied with target directories",
@@ -36,19 +36,31 @@ parser.add_argument("-r", "--reverse", help="create file specifying reverse oper
 parser.add_argument("-d", "--delimiter", help="delimiter character used in 'file' (default '\s+')", default="\s+")
 args = parser.parse_args()
 
+# start with an empty dictionary d that is to contain the contents of 'file'
 d = {}
+
+# if file entries do not contain the full path, it is prepended later
+dirOfFile = filenameToDir(args.file)
+
+# read file
 with open(args.file) as o:
     if args.verbose:
         print "accessing text file {}".format(args.file)
     for l in o:
+        # leave out lines starting with args.comment
         if not l.startswith(args.comment):
             (k, v) = re.split(args.delimiter, l.rstrip())
+            # prepend dirOfFile, if k (first column) does not contain full path
+            if not dirOfFile in k:
+                k = "{}{}{}".format(dirOfFile, os.sep, k)
+            # treat asterisks (*) as a wildcard
             if "*" in k:
                 for filename in glob.glob(k):
                     d[filename] = v
             else:
                 d[k] = v
 
+# the default action is copying; this can be changed with the -m flag
 action = "copying"
 for k in d:
     if args.move:
@@ -59,6 +71,7 @@ for k in d:
     if args.verbose:
         print "{} file {} to {}".format(action, k, d[k])
 
+# reverse file is generated, if the -r flag is specified
 if args.reverse != "":
     dr = {}
     for k in d:
@@ -72,5 +85,6 @@ if args.reverse != "":
     if args.verbose:
         print "reverse file saved at {}".format(args.reverse)
 
+# wrap it up with a final message, if args.verbose was chosen
 if args.verbose:
     print "{} finished {} files specified in {}".format(sys.argv[0], action, args.file)
