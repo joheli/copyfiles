@@ -7,6 +7,10 @@ import sys
 from shutil import copy2
 from shutil import move
 
+# Version no.
+version = "0.4"
+
+
 # function to check if file exists
 def file_exists(parser, arg):
     if not os.path.isfile(arg):
@@ -14,19 +18,22 @@ def file_exists(parser, arg):
     else:
         return arg
 
+
 # function returning the filename only given the path
 def pathToFile(path):
     h, t = os.path.split(path)
     return t
+
 
 # function returning the directory in which a given file resides
 def filenameToDir(filename):
     p = os.path.abspath(filename)
     return os.path.dirname(p)
 
+
 # create an argument parser and add positional (=mandatory) and optional arguments
 parser = argparse.ArgumentParser(description="copies files to target directories specified in a text file",
-                                 epilog="author: Johannes Elias (joheli@gmx.net)")
+                                 epilog="version: {}, author: Johannes Elias (joheli@gmx.net)".format(version))
 parser.add_argument("file", help="text file listing files to be copied with target directories",
                     type=lambda x: file_exists(parser, x))
 parser.add_argument("-v", "--verbose", help="increase output verbosity", action="store_true")
