@@ -43,11 +43,11 @@ Specify here the file that contains instructions for the copying or moving of fi
 
 ### -h
 
-This flag makes the script display a help message (see [Usage](#Usage)).
+This flag makes the script display a help message (see [Usage](#usage)).
 
 ### -v
 
-Using this flag increases verbosity of the script.
+Using this flag increases the verbosity of the script.
 
 ### -m
 

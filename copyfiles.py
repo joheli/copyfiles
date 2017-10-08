@@ -3,6 +3,7 @@ import argparse
 import os.path
 import re
 import glob
+import sys
 from shutil import copy2
 from shutil import move
 
@@ -47,15 +48,16 @@ with open(args.file) as o:
                     d[filename] = v
             else:
                 d[k] = v
+
+action = "copying"
 for k in d:
-    t = "copying"
     if args.move:
-        t = "moving"
+        action = "moving"
         move(k, d[k])
     else:
         copy2(k, d[k])
     if args.verbose:
-        print "{} file {} to {}".format(t, k, d[k])
+        print "{} file {} to {}".format(action, k, d[k])
 
 if args.reverse != "":
     dr = {}
@@ -70,4 +72,5 @@ if args.reverse != "":
     if args.verbose:
         print "reverse file saved at {}".format(args.reverse)
 
-print "Done!"
+if args.verbose:
+    print "{} finished {} files specified in {}".format(sys.argv[0], action, args.file)
