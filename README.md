@@ -5,7 +5,8 @@ Copies files to directories specified in a text file
 
 Checkout the help message to get aquainted with the usage of copyfiles:
 
-`johannes@blausturm:~/Lernen/Python/copyfiles$ python copyfiles.py -h
+```
+$ python copyfiles.py -h
 usage: copyfiles.py [-h] [-v] [-m] [-c COMMENT] [-r REVERSE] [-d DELIMITER]
                     file
 
@@ -26,5 +27,8 @@ optional arguments:
   -d DELIMITER, --delimiter DELIMITER
                         delimiter character used in 'file' (default '\s+')
 
-author: Johannes Elias (joheli@gmx.net)`
+author: Johannes Elias (joheli@gmx.net)
+
+```
+
 
