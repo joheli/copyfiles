@@ -6,9 +6,10 @@ import glob
 import sys
 from shutil import copy2
 from shutil import move
+from distutils import dir_util
 
 # Version no.
-version = "0.5"
+version = "0.6"
 
 
 # function to check if file exists
@@ -68,22 +69,44 @@ with open(args.file) as o:
                 d[k] = v
 
 # the default action is copying; this can be changed with the -m flag
-action = "copying"
 for k in d:
+    errormsg = "{} is neither a file nor a folder!".format(k)
     if args.move:
         action = "moving"
-        move(k, d[k])
+        if os.path.isfile(k):
+            what = "file"
+            move(k, d[k])
+        elif os.path.isdir(k):
+            what = "folder"
+            dir_util.copy_tree(k, d[k])
+            dir_util.remove_tree(k)
+        else:
+            print errormsg
+            sys.exit(3)
     else:
-        copy2(k, d[k])
+        action = "copying"
+        if os.path.isfile(k):
+            what = "file"
+            copy2(k, d[k])
+        elif os.path.isdir(k):
+            what = "folder"
+            dir_util.copy_tree(k, d[k])
+        else:
+            print errormsg
+            sys.exit(3)
     if args.verbose:
-        print "{} file {} to {}".format(action, k, d[k])
+        print "{} {} {} to {}".format(action, what, k, d[k])
 
 # reverse file is generated, if the -r flag is specified
 if args.reverse != "":
     dr = {}
     for k in d:
-        newFilePath = d[k] + os.sep + pathToFile(k)
-        dirname = filenameToDir(k)
+        if os.path.isfile(k):
+            newFilePath = d[k] + os.sep + pathToFile(k)
+            dirname = filenameToDir(k)
+        else:
+            newFilePath = d[k]
+            dirname = k
         dr[newFilePath] = dirname
     rfile = open(args.reverse, "w")
     for k2 in dr:
@@ -94,4 +117,4 @@ if args.reverse != "":
 
 # wrap it up with a final message, if args.verbose was chosen
 if args.verbose:
-    print "{} finished {} files specified in {}".format(sys.argv[0], action, args.file)
+    print "{} finished {} files/folders specified in {}".format(sys.argv[0], action, args.file)

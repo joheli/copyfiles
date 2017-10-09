@@ -1,6 +1,10 @@
-# files 1
-/home/johannes/temp/test/test.docx	/home/johannes/temp/test2
+# copy folder: contents of test5 are copied into test10
+# note: subdirectory test5 is *not* created in test10!
+/home/johannes/temp/test/test5	/home/johannes/temp/test/test10
 
-# files 2
-/home/johannes/temp/test/lecko*	/home/johannes/temp/test2
-/home/johannes/temp/test/mio	/home/johannes/temp/test2
+# copy file: file(s) in test1 starting with 'in' are copied into test9
+/home/johannes/temp/test/test1/in*    /home/johannes/temp/test/test9
+
+# relative paths
+lic*    /home/johannes/temp/test/test9
+test5   /home/johannes/temp/test/test9/mango
