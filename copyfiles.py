@@ -8,7 +8,7 @@ from shutil import copy2
 from shutil import move
 
 # Version no.
-version = "0.4"
+version = "0.5"
 
 
 # function to check if file exists
@@ -46,7 +46,7 @@ args = parser.parse_args()
 # start with an empty dictionary d that is to contain the contents of 'file'
 d = {}
 
-# if file entries do not contain the full path, it is prepended later
+# dirOfFile stores the directory in which 'file' resides; this value is needed, if source paths are not absolute
 dirOfFile = filenameToDir(args.file)
 
 # read file
@@ -54,11 +54,11 @@ with open(args.file) as o:
     if args.verbose:
         print "accessing text file {}".format(args.file)
     for l in o:
-        # leave out lines starting with args.comment
-        if not l.startswith(args.comment):
+        # leave out lines starting with args.comment AND empty lines
+        if not l.startswith(args.comment) and l.rstrip().strip() != "":
             (k, v) = re.split(args.delimiter, l.rstrip())
-            # prepend dirOfFile, if k (first column) does not contain full path
-            if not dirOfFile in k:
+            # prepend dirOfFile, if k (first column) is not an absolute path
+            if not os.path.isabs(k):
                 k = "{}{}{}".format(dirOfFile, os.sep, k)
             # treat asterisks (*) as a wildcard
             if "*" in k:
