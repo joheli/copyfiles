@@ -1,6 +1,6 @@
 # copyfiles.py
 
-This python script copies files to directories specified in a text file.
+This python script copies files and/or folders to directories specified in a text file.
 
 # Usage
 
